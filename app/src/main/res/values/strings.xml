@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">ChatyMeety</string>
+    <string name="welcome_to_chatymeety">Welcome to ChatyMeety</string>
+    <string name="already_have_account">ALREADY HAVE ACCOUNT</string>
+    <string name="need_a_new_account">NEED A NEW ACCOUNT</string>
 </resources>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "221097063067",
+    "project_id": "chatymeety",
+    "storage_bucket": "chatymeety.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221097063067:android:0b506dfd29570dca398c3e",
+        "android_client_info": {
+          "package_name": "com.arnab.chatymeety"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221097063067-afgdfh84kqkb6crtkdnsuaae617ipcm1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.arnab.chatymeety",
+            "certificate_hash": "fc170c9f0ce6ebf2a2af2dd1a0d5d93d76ed6c54"
+          }
+        },
+        {
+          "client_id": "221097063067-2qu72phn797qv19lhk2lgb81ddjmr8ot.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqm8O7uXs4W-Dmkh3wWPds9IgrjJeI4Lg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "221097063067-2qu72phn797qv19lhk2lgb81ddjmr8ot.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
