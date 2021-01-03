@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "221097063067",
+    "firebase_url": "https://chatymeety-default-rtdb.firebaseio.com/",
     "project_id": "chatymeety",
     "storage_bucket": "chatymeety.appspot.com"
   },

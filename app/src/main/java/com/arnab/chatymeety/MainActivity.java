@@ -4,20 +4,32 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.widget.ToolbarWidgetWrapper;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private Toolbar mtoolbar;
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private MyPagerAdapter mpagerAdapter;
+
 
 
     @Override
@@ -27,6 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mtoolbar=findViewById(R.id.main_toolbar);
+        mTabLayout=findViewById(R.id.tab);
+        mViewPager=findViewById(R.id.viewpager);
+        mpagerAdapter=new MyPagerAdapter(getSupportFragmentManager(),BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+
+
+        mViewPager.setAdapter(mpagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
+
+
         setSupportActionBar(mtoolbar);
         getSupportActionBar().setTitle("ChatyMeety");
 
@@ -62,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId()==R.id.main_menu_logout){
             mAuth.signOut();
             sendToAuth();
+        }
+        if (item.getItemId()==R.id.main_menu_account_setting){
+            startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
         }
 
         return true;

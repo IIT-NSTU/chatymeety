@@ -3,4 +3,7 @@
     <string name="welcome_to_chatymeety">Welcome to ChatyMeety</string>
     <string name="already_have_account">ALREADY HAVE ACCOUNT</string>
     <string name="need_a_new_account">NEED A NEW ACCOUNT</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
