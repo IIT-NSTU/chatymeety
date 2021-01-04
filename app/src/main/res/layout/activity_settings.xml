@@ -12,11 +12,12 @@
         android:layout_width="170dp"
         android:layout_height="170dp"
         android:layout_marginTop="150dp"
-        android:src="@drawable/common_google_signin_btn_icon_dark"
+        android:src="@drawable/defaultpic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></de.hdodenhof.circleimageview.CircleImageView>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/defaultpic"></de.hdodenhof.circleimageview.CircleImageView>
 
     <TextView
         android:id="@+id/settings_name"

@@ -63,7 +63,10 @@ public class SettingsActivity extends AppCompatActivity {
 
                 mName.setText(name);
                 mStatus.setText(status);
-                Picasso.get().load(imageLink).into(mCircleImageView);
+                if(imageLink.equals("default")){
+                    mCircleImageView.setImageResource(R.drawable.defaultpic);
+                }
+                else Picasso.get().load(imageLink).into(mCircleImageView);
 
             }
 

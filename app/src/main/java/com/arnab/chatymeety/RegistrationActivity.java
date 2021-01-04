@@ -69,8 +69,9 @@ public class RegistrationActivity extends AppCompatActivity {
                                 HashMap<String,String> info=new HashMap<>();
                                 info.put("name",name);
                                 info.put("status","Hi I'm "+name);
-                                info.put("imageLink","https://firebasestorage.googleapis.com/v0/b/chatymeety.appspot.com/o/user%2Fdefault.jpg?alt=media&token=2dfd97cd-745b-4114-940f-0678aa8c11e9");
-                                info.put("thumbnail","https://firebasestorage.googleapis.com/v0/b/chatymeety.appspot.com/o/user%2Fdefault.jpg?alt=media&token=2dfd97cd-745b-4114-940f-0678aa8c11e9");
+                                info.put("imageLink","default");
+                                info.put("thumbnail","default");
+                                /*https://firebasestorage.googleapis.com/v0/b/chatymeety.appspot.com/o/user%2Fdefault.jpg?alt=media&token=2dfd97cd-745b-4114-940f-0678aa8c11e9*/
 
                                 String uid=mAuth.getCurrentUser().getUid();
                                 mRef.child(uid).setValue(info).addOnCompleteListener(new OnCompleteListener<Void>() {
