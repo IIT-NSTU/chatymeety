@@ -4,59 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity"
+    tools:context=".ProfileActivity"
     android:background="@color/colorPrimary">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/settings_image"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:layout_marginTop="150dp"
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="421dp"
+        android:layout_height="410dp"
+        android:adjustViewBounds="false"
+        android:fadingEdge="vertical"
+        android:fadingEdgeLength="600dp"
         android:src="@drawable/defaultpic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/defaultpic"></de.hdodenhof.circleimageview.CircleImageView>
+        tools:src="@drawable/defaultpic"></ImageView>
 
     <TextView
-        android:id="@+id/settings_name"
+        android:id="@+id/profile_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="5dp"
         android:text="TextView"
         android:textColor="#070707"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_image" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
     <TextView
-        android:id="@+id/settings_status"
+        android:id="@+id/profile_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="5dp"
         android:text="TextView"
         android:textColor="#E90C0C0C"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_name" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_name" />
 
     <Button
-        android:id="@+id/settings_image_cng"
-        android:layout_width="144dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/profile_req_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="5dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:text="CHANGE IMAGE"
-        app:layout_constraintBottom_toTopOf="@+id/settings_status_cng"
+        android:text="SEND FRIEND REQUEST"
+        app:layout_constraintBottom_toTopOf="@+id/profile_status_cng"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/settings_status_cng"
+        android:id="@+id/profile_status_cng"
         android:layout_width="145dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="74dp"

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,7 +73,14 @@ public class AllUserActivity extends AppCompatActivity {
                 Log.d("debug",model.toString());
                 holder.setName(model.getName());
                 holder.setStatus(model.getStatus());
-                holder.setImage(model.getImageLink());
+                holder.setImage(model.getThumbnail());
+                final String uid=getRef(position).getKey();
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(AllUserActivity.this,ProfileActivity.class).putExtra("uid",uid));
+                    }
+                });
                 Log.d("debug","here2");
             }
         };

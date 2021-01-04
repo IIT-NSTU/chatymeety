@@ -36,4 +36,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.6.0'
     implementation 'com.google.firebase:firebase-storage:19.2.1'
     implementation 'com.google.firebase:firebase-auth:20.0.1'
+    implementation 'id.zelory:compressor:2.1.0'
 }
