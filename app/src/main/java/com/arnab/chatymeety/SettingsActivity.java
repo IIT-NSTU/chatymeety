@@ -44,6 +44,7 @@ public class SettingsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mRef;
     private StorageReference mStorageRef;
+    private DatabaseReference dataRefForOnline;
 
 
     @Override
@@ -59,6 +60,11 @@ public class SettingsActivity extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         mRef= FirebaseDatabase.getInstance().getReference().child("user").child(mAuth.getCurrentUser().getUid());
         mStorageRef = FirebaseStorage.getInstance().getReference();
+
+        //------for online check-------//
+        dataRefForOnline = FirebaseDatabase.getInstance().getReference().child("user").child(mAuth.getCurrentUser().getUid());
+
+
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -204,6 +210,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
     }
+
     public byte[] imageFileToByte(File image,int maxWidth,int maxHeight,int quality){
         //compression to bitmap
         Bitmap bitmapImage=null;
@@ -221,5 +228,17 @@ public class SettingsActivity extends AppCompatActivity {
         byte[] byteImage = baos.toByteArray();
 
         return byteImage;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        dataRefForOnline.child("online").setValue(true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dataRefForOnline.child("online").setValue(false);
     }
 }

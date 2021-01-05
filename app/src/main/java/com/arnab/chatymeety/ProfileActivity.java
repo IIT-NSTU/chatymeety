@@ -22,6 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.Date;
+
 enum State{
     FRIEND,NOT_FRIEND,SENT,RECEIVED
 }
@@ -36,6 +38,7 @@ public class ProfileActivity extends AppCompatActivity {
     private State state;
     private DatabaseReference db;
     private String profileUid;
+    private DatabaseReference dataRefForOnline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,9 @@ public class ProfileActivity extends AppCompatActivity {
         multiBtn=findViewById(R.id.profile_req_btn);
         curUser=FirebaseAuth.getInstance().getCurrentUser();
         db=FirebaseDatabase.getInstance().getReference();
+
+        //------for online check-------//
+        dataRefForOnline = FirebaseDatabase.getInstance().getReference().child("user").child(curUser.getUid());
 
         mRef= FirebaseDatabase.getInstance().getReference().child("user").child(profileUid);
         mRef.addValueEventListener(new ValueEventListener() {
@@ -194,6 +200,9 @@ public class ProfileActivity extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(ProfileActivity.this, "Say hello to your new friend", Toast.LENGTH_SHORT).show();
+                                                //------add to the friends list
+                                                db.child("friends").child(curUser.getUid()).child(profileUid).child("date").setValue(new Date().toString());
+                                                db.child("friends").child(profileUid).child(curUser.getUid()).child("date").setValue(new Date().toString());
                                                 multiBtn.setText("UNFRIEND");
                                                 multiBtn.setClickable(true);
                                                 state=State.FRIEND;
@@ -224,10 +233,17 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        dataRefForOnline.child("online").setValue(true);
         if(curUser.getUid().equals(profileUid)){
             startActivity(new Intent(ProfileActivity.this,SettingsActivity.class));
             finish();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dataRefForOnline.child("online").setValue(false);
     }
 
     public void updateState(){

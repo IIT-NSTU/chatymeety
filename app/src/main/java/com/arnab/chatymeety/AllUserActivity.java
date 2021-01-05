@@ -17,10 +17,9 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 public class AllUserActivity extends AppCompatActivity {
@@ -29,6 +28,8 @@ public class AllUserActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private DatabaseReference dataRef;
     private FirebaseRecyclerAdapter adapter;
+    private DatabaseReference dataRefForOnline;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,10 @@ public class AllUserActivity extends AppCompatActivity {
         recyclerView=findViewById(R.id.all_user_list);
         toolbar=findViewById(R.id.all_user_toolbar);
         dataRef= FirebaseDatabase.getInstance().getReference().child("user");
+        mAuth=FirebaseAuth.getInstance();
+
+        //------for online check-------//
+        dataRefForOnline = FirebaseDatabase.getInstance().getReference().child("user").child(mAuth.getCurrentUser().getUid());
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -53,6 +58,9 @@ public class AllUserActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        dataRefForOnline.child("online").setValue(true);
+
         FirebaseRecyclerOptions<User> options =
                 new FirebaseRecyclerOptions.Builder<User>()
                         .setQuery(dataRef, User.class)
@@ -92,6 +100,14 @@ public class AllUserActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         if(adapter!=null)adapter.stopListening();
+
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dataRefForOnline.child("online").setValue(false);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

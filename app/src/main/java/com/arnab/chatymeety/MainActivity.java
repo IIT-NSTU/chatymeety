@@ -18,6 +18,8 @@ import android.view.View;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
 
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private MyPagerAdapter mpagerAdapter;
+    private DatabaseReference dataRef;
 
 
 
@@ -61,6 +64,17 @@ public class MainActivity extends AppCompatActivity {
         if(currentUser==null){
             sendToAuth();
         }
+        else{
+            dataRef= FirebaseDatabase.getInstance().getReference().child("user").child(mAuth.getCurrentUser().getUid());
+            dataRef.child("online").setValue(true);
+        }
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mAuth.getCurrentUser()!=null)dataRef.child("online").setValue(false);
     }
 
     void sendToAuth(){
