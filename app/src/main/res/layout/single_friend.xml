@@ -4,7 +4,7 @@
     android:id="@+id/single_friend_frame"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#B4369E39">
+    android:background="#2B2B2B">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/friend_pic"

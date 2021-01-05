@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT;
+import static androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_SET_USER_VISIBLE_HINT;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         mtoolbar=findViewById(R.id.main_toolbar);
         mTabLayout=findViewById(R.id.tab);
         mViewPager=findViewById(R.id.viewpager);
-        mpagerAdapter=new MyPagerAdapter(getSupportFragmentManager(),BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        mpagerAdapter=new MyPagerAdapter(getSupportFragmentManager(),BEHAVIOR_SET_USER_VISIBLE_HINT);
 
 
         mViewPager.setAdapter(mpagerAdapter);

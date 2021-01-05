@@ -1,6 +1,8 @@
 package com.arnab.chatymeety;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -92,26 +94,47 @@ public class FriendsFragment extends Fragment {
                 dataRefUsers.child(uid).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String name=snapshot.child("name").getValue().toString();
-                        String thumbnail=snapshot.child("thumbnail").getValue().toString();
-                        boolean online=(boolean)snapshot.child("online").getValue();
+                        final String name=snapshot.child("name").getValue().toString();
+                        final String thumbnail=snapshot.child("thumbnail").getValue().toString();
+                        final boolean online=(boolean)snapshot.child("online").getValue();
                         holder.setName(name);
                         holder.setImage(thumbnail);
                         holder.setOnline(online);
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Log.d("debug","here345");
 
+                                CharSequence[] options = new CharSequence[]{"Open profile", "Send massage"};
+                                final AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+                                builder.setTitle("Select Option");
+                                builder.setItems(options, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Log.d("debug","here");
+                                        if(which==0){
+                                            startActivity(new Intent(getContext(),ProfileActivity.class).putExtra("uid",uid));
+                                        }
+                                        else if(which==1){
+                                            Intent intent=new Intent(mainView.getContext(),ChatActivity.class);
+                                            intent.putExtra("uid",uid);
+                                            intent.putExtra("name",name);
+                                            intent.putExtra("thumbnail",thumbnail);
+                                            //intent.putExtra("online",online);
+                                            startActivity(intent);
+                                        }
+                                    }
+                                });
+
+                                builder.show();
+
+                            }
+                        });
 
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) { }
                 });
-
-                /*holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        startActivity(new Intent(mainView.getContext(),ProfileActivity.class).putExtra("uid",uid));
-                    }
-                });
-                Log.d("debug","here2");*/
             }
         };
         adapter.startListening();
