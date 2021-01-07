@@ -79,7 +79,11 @@ public class ChatsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Notify.cancelAll(getContext());
+
+        //delete notifications
+        if(getContext()!=null)Notify.cancel(getContext(),0);
+
+
         FirebaseRecyclerOptions<Chat> options =
                 new FirebaseRecyclerOptions.Builder<Chat>()
                         .setQuery(dataRefFriends, Chat.class)
@@ -103,7 +107,10 @@ public class ChatsFragment extends Fragment {
                 dataRefUsers.child(uid).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Notify.cancelAll(getContext());
+
+                        /*//stop notification
+                        if(getContext()!=null)Notify.cancel(getContext(),0);*/
+
                         final String name=snapshot.child("name").getValue().toString();
                         final String thumbnail=snapshot.child("thumbnail").getValue().toString();
                         final boolean online=(boolean)snapshot.child("online").getValue();

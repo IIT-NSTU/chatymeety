@@ -41,11 +41,10 @@ public class ChatyMeety extends Application {
             FirebaseDatabase.getInstance().getReference().child("notification").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Notify.build(getApplicationContext()).enableVibration(true);
-                    Notify.build(getApplicationContext())
+                    Notify.build(getApplicationContext()).setId(0)
                             .setTitle("New massage")
                             .setContent("click to go to chat")
-                            .setSmallIcon(R.drawable.ic_logo)
+                            .setSmallIcon(R.mipmap.ic_launcher)
                             .setColor(R.color.colorAccent)
                             //.setLargeIcon("https://images.pexels.com/photos/139829/pexels-photo-139829.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=150&w=440")
                             //.largeCircularIcon()

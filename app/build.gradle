@@ -40,4 +40,5 @@ dependencies {
     implementation 'com.github.bosphere.android-fadingedgelayout:fadingedgelayout:1.0.0'
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     implementation 'com.github.isradeleon:Notify-Android:1.0.4'
+    implementation 'gun0912.ted:tedpermission:2.2.2'
 }

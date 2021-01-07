@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -158,7 +159,10 @@ public class ChatActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 Log.d("debug","here2");
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                if(getCurrentFocus()!=null){
+                    IBinder iBinder=getCurrentFocus().getWindowToken();
+                    if(imm!=null && iBinder!=null)imm.hideSoftInputFromWindow(iBinder, 0);
+                }
                 return false;
             }
         });
@@ -193,7 +197,7 @@ public class ChatActivity extends AppCompatActivity {
                     rootRef.child("message").child(currentUid).child(chatUid).push().setValue(msg);
                     rootRef.child("message").child(chatUid).child(currentUid).push().setValue(msg);
 
-                    rootRef.child("notification").child(chatUid).child(chatUid).setValue(msg);
+                    rootRef.child("notification").child(chatUid).child(chatUid).setValue(chatText);
 
 
                 }

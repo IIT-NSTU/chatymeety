@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.application.isradeleon.notify.Notify;
 import com.github.ybq.android.spinkit.sprite.Sprite;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -90,6 +91,18 @@ public class RegistrationActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         progressBar.setVisibility(View.INVISIBLE);
                                         Toast.makeText(RegistrationActivity.this, "registration successful", Toast.LENGTH_SHORT).show();
+
+                                        Notify.build(RegistrationActivity.this).setId(1)
+                                        .setTitle("ciao! "+name)
+                                        .setContent("Click here to make some friends")
+                                        .setSmallIcon(R.mipmap.ic_launcher)
+                                        .setColor(R.color.colorAccent)
+                                        //.setLargeIcon("https://images.pexels.com/photos/139829/pexels-photo-139829.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=150&w=440")
+                                        //.largeCircularIcon()
+                                        //.setPicture("https://images.pexels.com/photos/1058683/pexels-photo-1058683.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940")
+                                        .setAction(new Intent(getApplicationContext(),AllUserActivity.class))
+                                        .show(); // Show notification
+
                                         startActivity(new Intent(RegistrationActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                                         finish();
                                     }
