@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager.setAdapter(mpagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setCurrentItem(1);
 
 
         setSupportActionBar(mtoolbar);
@@ -96,6 +97,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
         if (item.getItemId()==R.id.main_menu_logout){
+
+            dataRef= FirebaseDatabase.getInstance().getReference().child("user").child(mAuth.getCurrentUser().getUid());
+            dataRef.child("online").setValue(false);
+
             mAuth.signOut();
             sendToAuth();
         }

@@ -8,11 +8,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
@@ -45,12 +50,18 @@ public class SettingsActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     private StorageReference mStorageRef;
     private DatabaseReference dataRefForOnline;
+    private ProgressBar progressBar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        progressBar=findViewById(R.id.settings_spin_kit);
+        final Sprite doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.VISIBLE);
 
         mCircleImageView=findViewById(R.id.settings_image);
         mName=findViewById(R.id.settings_name);
@@ -77,8 +88,21 @@ public class SettingsActivity extends AppCompatActivity {
                 mStatus.setText(status);
                 if(imageLink.equals("default")){
                     mCircleImageView.setImageResource(R.drawable.defaultpic);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
-                else Picasso.get().load(imageLink).into(mCircleImageView);
+                else Picasso.get().load(imageLink).into(mCircleImageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
+
+
 
             }
 
@@ -102,7 +126,6 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent gallery=new Intent();
                 gallery.setType("image/*");
                 gallery.setAction(Intent.ACTION_GET_CONTENT);
-
                 startActivityForResult(Intent.createChooser(gallery,"SELECT IMAGE"),1);
             }
         });
@@ -118,6 +141,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        progressBar.setVisibility(View.VISIBLE);
         if(requestCode==1 && resultCode==RESULT_OK){
             Uri imageUri=data.getData();
             CropImage.activity(imageUri).setAspectRatio(1,1)
@@ -128,6 +152,8 @@ public class SettingsActivity extends AppCompatActivity {
             if(resultCode==RESULT_OK){
 
                 //progress bar start
+
+                progressBar.setVisibility(View.VISIBLE);
 
                 Uri resultUri=result.getUri();
                 File resultImage=new File(resultUri.getPath());
@@ -183,8 +209,20 @@ public class SettingsActivity extends AppCompatActivity {
 
                                                     //dismiss progressbar
 
-                                                    Picasso.get().load(imageLink).into(mCircleImageView);
+
+                                                    Picasso.get().load(imageLink).into(mCircleImageView, new Callback() {
+                                                        @Override
+                                                        public void onSuccess() {
+                                                            progressBar.setVisibility(View.GONE);
+                                                        }
+
+                                                        @Override
+                                                        public void onError(Exception e) {
+
+                                                        }
+                                                    });
                                                     Toast.makeText(SettingsActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+
                                                 }
                                             }
                                         });
@@ -195,6 +233,7 @@ public class SettingsActivity extends AppCompatActivity {
                                     }
                                 }
                             });
+                            progressBar.setVisibility(View.VISIBLE);
 
                             //////////////////////////////////
                             Toast.makeText(SettingsActivity.this, "Uploading", Toast.LENGTH_SHORT).show();

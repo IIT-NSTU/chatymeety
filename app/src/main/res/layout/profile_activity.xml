@@ -7,18 +7,39 @@
     tools:context=".ProfileActivity"
     android:background="@color/colorPrimary">
 
-    <ImageView
-        android:id="@+id/profile_image"
-        android:layout_width="421dp"
-        android:layout_height="410dp"
-        android:adjustViewBounds="false"
-        android:fadingEdge="vertical"
-        android:fadingEdgeLength="600dp"
-        android:src="@drawable/defaultpic"
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/profile_spin_kit"
+        style="@style/SpinKitView.Large"
+        android:layout_width="199dp"
+        android:layout_height="204dp"
+        android:layout_gravity="center"
+        app:SpinKit_Color="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/pp" />
+
+    <com.bosphere.fadingedgelayout.FadingEdgeLayout
+        android:id="@+id/pp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/defaultpic"></ImageView>
+        app:fel_edge="bottom">
+
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="407dp"
+            android:layout_height="408dp"
+            android:adjustViewBounds="false"
+            android:fadingEdge="vertical"
+            android:fadingEdgeLength="600dp"
+            android:src="@drawable/defaultpic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/defaultpic" />
+    </com.bosphere.fadingedgelayout.FadingEdgeLayout>
 
     <TextView
         android:id="@+id/profile_name"
@@ -26,11 +47,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="TextView"
-        android:textColor="#070707"
+        android:textColor="@android:color/white"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+        app:layout_constraintTop_toBottomOf="@+id/pp" />
 
     <TextView
         android:id="@+id/profile_status"
@@ -38,8 +59,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="TextView"
-        android:textColor="#E90C0C0C"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_name" />
@@ -49,6 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginBottom="5dp"
+        android:background="@drawable/chat_background_own"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="SEND FRIEND REQUEST"
@@ -60,10 +83,11 @@
         android:id="@+id/profile_status_cng"
         android:layout_width="145dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="74dp"
+        android:layout_marginBottom="30dp"
         android:paddingLeft="17dp"
         android:paddingRight="15dp"
         android:text="CHANGE STATUS"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

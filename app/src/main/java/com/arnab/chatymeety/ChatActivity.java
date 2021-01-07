@@ -8,12 +8,17 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -53,6 +58,7 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private String chatUid,currentUid;
+    private DatabaseReference dataRefForOnline;
 
 
     @Override
@@ -60,16 +66,27 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         currentUser= FirebaseAuth.getInstance().getCurrentUser();
         currentUid=currentUser.getUid();
         rootRef=FirebaseDatabase.getInstance().getReference();
+
+        //------for online check-------//
+        dataRefForOnline = FirebaseDatabase.getInstance().getReference().child("user").child(currentUid);
+
+        String name=getIntent().getExtras().getString("name");
+        String thumbnail=getIntent().getExtras().getString("thumbnail");
+        chatUid=getIntent().getExtras().getString("uid");
+        //String online=getIntent().getExtras().getString("online");
 
         addBtn=findViewById(R.id.chat_add);
         sendBtn=findViewById(R.id.chat_send);
         text=findViewById(R.id.chat_text);
         recyclerView=findViewById(R.id.chat_recycler);
         linearLayoutManager=new LinearLayoutManager(this);
-        msgAdapter=new MessageAdapter(msgList,currentUid);
+        msgAdapter=new MessageAdapter(msgList,currentUid,thumbnail);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -79,6 +96,8 @@ public class ChatActivity extends AppCompatActivity {
         toolbar=findViewById(R.id.chat_tool_bar);
         setSupportActionBar(toolbar);
 
+
+
         ActionBar actionBar=getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowCustomEnabled(true);
@@ -87,10 +106,7 @@ public class ChatActivity extends AppCompatActivity {
         View actionBarView=inflater.inflate(R.layout.custom_chat_bar,null);
         actionBar.setCustomView(actionBarView);
 
-        String name=getIntent().getExtras().getString("name");
-        String thumbnail=getIntent().getExtras().getString("thumbnail");
-        chatUid=getIntent().getExtras().getString("uid");
-        //String online=getIntent().getExtras().getString("online");
+
 
 
 
@@ -127,6 +143,26 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.chat_main).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d("debug","here1");
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return false;
+            }
+        });
+
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d("debug","here2");
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return false;
+            }
+        });
+
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,8 +177,23 @@ public class ChatActivity extends AppCompatActivity {
                     msg.put("seen",false);
                     msg.put("from",currentUid);
 
+                    Map chatWon=new HashMap();
+                    chatWon.put("lastMsg",chatText);
+                    chatWon.put("seen",true);
+                    chatWon.put("time",ServerValue.TIMESTAMP);
+
+                    Map chatOther=new HashMap();
+                    chatOther.put("lastMsg",chatText);
+                    chatOther.put("seen",false);
+                    chatOther.put("time",ServerValue.TIMESTAMP);
+
+                    rootRef.child("chat").child(currentUid).child(chatUid).updateChildren(chatWon);
+                    rootRef.child("chat").child(chatUid).child(currentUid).updateChildren(chatOther);
+
                     rootRef.child("message").child(currentUid).child(chatUid).push().setValue(msg);
                     rootRef.child("message").child(chatUid).child(currentUid).push().setValue(msg);
+
+                    rootRef.child("notification").child(chatUid).child(chatUid).setValue(msg);
 
 
                 }
@@ -164,6 +215,7 @@ public class ChatActivity extends AppCompatActivity {
                 Message message=snapshot.getValue(Message.class);
                 msgList.add(message);
                 msgAdapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(msgList.size()-1);
                 Log.d("debug","here");
             }
 
@@ -188,4 +240,36 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        dataRefForOnline.child("online").setValue(true);
+        rootRef.child("chat").child(currentUid).child(chatUid).child("seen").setValue(true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dataRefForOnline.child("online").setValue(false);
+        rootRef.child("chat").child(currentUid).child(chatUid).child("seen").setValue(true);
+    }
+
+
+    /*@Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (getCurrentFocus() != null && getCurrentFocus()!=sendBtn) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        return super.dispatchTouchEvent(ev);
+    }*/
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
 }

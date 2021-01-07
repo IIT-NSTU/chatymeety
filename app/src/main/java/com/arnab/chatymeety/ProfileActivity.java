@@ -9,9 +9,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -39,11 +43,17 @@ public class ProfileActivity extends AppCompatActivity {
     private DatabaseReference db;
     private String profileUid;
     private DatabaseReference dataRefForOnline;
+    private ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_activity);
+
+        progressBar=findViewById(R.id.profile_spin_kit);
+        final Sprite doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
 
         profileUid=getIntent().getExtras().getString("uid");
         profileImage=findViewById(R.id.profile_image);
@@ -66,6 +76,8 @@ public class ProfileActivity extends AppCompatActivity {
                 profileName.setText(name);
                 profileStatus.setText(status);
                 Picasso.get().load(imageLink).into(profileImage);
+
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -79,8 +91,9 @@ public class ProfileActivity extends AppCompatActivity {
         multiBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 multiBtn.setClickable(false);
-                if(state==State.NOT_FRIEND){
+                if(state==State.NOT_FRIEND){//if you press it will be send req
 
                     db.child("relation").child(curUser.getUid()).child(profileUid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -96,7 +109,9 @@ public class ProfileActivity extends AppCompatActivity {
                                                 multiBtn.setText("DELETE SENT REQUEST?");
                                                 multiBtn.setClickable(true);
                                                 state=State.SENT;
-
+                                                //added into the req section
+                                                db.child("request").child(profileUid).child(curUser.getUid()).child("time").setValue(ServerValue.TIMESTAMP);
+                                                progressBar.setVisibility(View.INVISIBLE);
                                             }
                                         });
                                     }
@@ -116,7 +131,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
                 }
-                else if (state==State.FRIEND){
+                else if (state==State.FRIEND){  ///click will result unfriend
                     db.child("relation").child(curUser.getUid()).child(profileUid).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -133,6 +148,15 @@ public class ProfileActivity extends AppCompatActivity {
                                                 multiBtn.setClickable(true);
                                                 state=State.NOT_FRIEND;
 
+                                                //also remove the data that both share
+                                                db.child("friends").child(curUser.getUid()).child(profileUid).removeValue();
+                                                db.child("friends").child(profileUid).child(curUser.getUid()).removeValue();
+                                                db.child("chat").child(curUser.getUid()).child(profileUid).removeValue();
+                                                db.child("chat").child(profileUid).child(curUser.getUid()).removeValue();
+                                                //messages also--------
+                                                db.child("message").child(curUser.getUid()).child(profileUid).removeValue();
+                                                db.child("message").child(profileUid).child(curUser.getUid()).removeValue();
+                                                progressBar.setVisibility(View.INVISIBLE);
                                             }
                                         });
                                     }
@@ -164,10 +188,10 @@ public class ProfileActivity extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(ProfileActivity.this, "Request cancelled", Toast.LENGTH_SHORT).show();
-                                                multiBtn.setText("SENT REQUEST");
+                                                multiBtn.setText("SEND FRIEND REQUEST");
                                                 multiBtn.setClickable(true);
                                                 state=State.NOT_FRIEND;
-
+                                                progressBar.setVisibility(View.INVISIBLE);
                                             }
                                         });
                                     }
@@ -207,6 +231,9 @@ public class ProfileActivity extends AppCompatActivity {
                                                 multiBtn.setClickable(true);
                                                 state=State.FRIEND;
 
+                                                //delete from the req section
+                                                db.child("request").child(curUser.getUid()).child(profileUid).removeValue();
+                                                progressBar.setVisibility(View.INVISIBLE);
                                             }
                                         });
                                     }
@@ -252,7 +279,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.getValue()==null){
                     state=State.NOT_FRIEND;
-                    multiBtn.setText("SENT REQUEST");
+                    multiBtn.setText("SEND FRIEND REQUEST");
                 }
                 else{
                     String tmp=snapshot.getValue().toString();

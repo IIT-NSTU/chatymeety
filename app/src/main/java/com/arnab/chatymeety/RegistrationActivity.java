@@ -10,8 +10,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -29,12 +32,18 @@ public class RegistrationActivity extends AppCompatActivity {
     private TextInputEditText mName,mEmail,mPassword;
     private FirebaseAuth mAuth;
     private DatabaseReference mRef;
+    private ProgressBar progressBar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        progressBar=findViewById(R.id.reg_spin_kit);
+        final Sprite doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.INVISIBLE);
 
         mtoolbar=findViewById(R.id.reg_toolbar);
         mAuth=FirebaseAuth.getInstance();
@@ -52,6 +61,7 @@ public class RegistrationActivity extends AppCompatActivity {
         mbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 final String name=mName.getText().toString();
                 String email=mEmail.getText().toString();
                 String password=mPassword.getText().toString();
@@ -62,6 +72,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     Toast.makeText(RegistrationActivity.this, "Choose a strong password", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    progressBar.setVisibility(View.VISIBLE);
                     mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -77,6 +88,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 mRef.child(uid).setValue(info).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
+                                        progressBar.setVisibility(View.INVISIBLE);
                                         Toast.makeText(RegistrationActivity.this, "registration successful", Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(RegistrationActivity.this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
                                         finish();

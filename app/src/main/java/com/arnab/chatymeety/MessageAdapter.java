@@ -13,15 +13,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
     private List<Message> mMessageList;
     private String curUid;
+    private String thumbnail;
 
-    public MessageAdapter(List<Message> mMessageList,String curUid) {
+    public MessageAdapter(List<Message> mMessageList,String curUid,String thumbnail) {
         this.curUid=curUid;
         this.mMessageList = mMessageList;
+        this.thumbnail=thumbnail;
     }
 
     @NonNull
@@ -52,6 +56,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             holder.messageText.setText(message.getMessage());
         }
         else{
+            Picasso.get().load(thumbnail).into(holder.head);
             /*RelativeLayout.LayoutParams layoutParams =
                     (RelativeLayout.LayoutParams)holder.messageText.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);

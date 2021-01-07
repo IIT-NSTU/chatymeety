@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/single_chat_frame"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/chat_pic"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/defaultpic"
+        tools:src="@drawable/defaultpic" />
+
+    <TextView
+        android:id="@+id/chat_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/chat_pic"
+        android:text="TextView"
+        android:textColor="@android:color/black"
+        android:textSize="25sp" />
+
+    <ImageView
+        android:id="@+id/chat_unseen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        app:srcCompat="@drawable/baseline_mark_email_unread_black_18dp" />
+
+    <TextView
+        android:id="@+id/chat_last_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/chat_name"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/chat_pic"
+        android:maxWidth="200dp"
+        android:maxLines="1"
+        android:text="TextView" />
+
+</RelativeLayout>

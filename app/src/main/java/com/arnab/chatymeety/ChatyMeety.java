@@ -1,9 +1,11 @@
 package com.arnab.chatymeety;
 
 import android.app.Application;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
+import com.application.isradeleon.notify.Notify;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,7 +37,31 @@ public class ChatyMeety extends Application {
 
                 }
             });
+
+            FirebaseDatabase.getInstance().getReference().child("notification").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    Notify.build(getApplicationContext()).enableVibration(true);
+                    Notify.build(getApplicationContext())
+                            .setTitle("New massage")
+                            .setContent("click to go to chat")
+                            .setSmallIcon(R.drawable.ic_logo)
+                            .setColor(R.color.colorAccent)
+                            //.setLargeIcon("https://images.pexels.com/photos/139829/pexels-photo-139829.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=150&w=440")
+                            //.largeCircularIcon()
+                            //.setPicture("https://images.pexels.com/photos/1058683/pexels-photo-1058683.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940")
+                            .setAction(new Intent(getApplicationContext(),MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                            .show(); // Show notification
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
+
+
 
     }
 }

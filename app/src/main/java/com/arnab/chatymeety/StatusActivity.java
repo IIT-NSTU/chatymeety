@@ -5,9 +5,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -42,10 +45,18 @@ public class StatusActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
                 //show progressbar here
 
                 String currentStatus=mStatus.getText().toString();
-                mRef.setValue(currentStatus);
+                mRef.setValue(currentStatus).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(StatusActivity.this, "Updated!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 

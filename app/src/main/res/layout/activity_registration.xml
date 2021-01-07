@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".RegistrationActivity">
 
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/reg_spin_kit"
+        style="@style/SpinKitView.Large"
+        android:layout_width="199dp"
+        android:layout_height="204dp"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        app:SpinKit_Color="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/reg_toolbar" />
+
     <include
         android:id="@+id/reg_toolbar"
         layout="@layout/tool_bar_layout"
@@ -85,11 +98,16 @@
 
     <Button
         android:id="@+id/reg_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="146dp"
+        android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
+        android:background="@drawable/chat_background_other"
+        android:focusable="auto"
+        android:stateListAnimator="@null"
         android:text="CREATE ACCOUNT"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
