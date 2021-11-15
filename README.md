@@ -1,5 +1,5 @@
 # ChatyMeety
-As the name suggest, ChatyMeety is an social app to chat and meet with your friends and family.
+As the name suggests, ChatyMeety is a social app to chat and meet with your friends and family.
 
 
 # Demo
